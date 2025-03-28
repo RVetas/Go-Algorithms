@@ -1,7 +1,9 @@
 package binarySearch
 
+import "cmp"
+
 // Binary Search is a search algorithm that finds the position of a target value in a sorted array.
-func BinarySearch(array []int, target int) int {
+func BinarySearch[T cmp.Ordered](array []T, target T) int {
 	var idx int
 	l := 0
 	r := len(array)

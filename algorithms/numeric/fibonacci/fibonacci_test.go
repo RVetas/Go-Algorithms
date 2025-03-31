@@ -8,13 +8,13 @@ import (
 
 func TestFibonacci(t *testing.T) {
 	// given
-	expectedResult := int64(6334266236422402381)
+	expectedResult := 6334266236422402381
 	// when
 	start := time.Now()
 	result := Fibonacci(103)
-	fmt.Printf("calculation time: %s\n", time.Since(start))
 	// then
+	fmt.Printf("calculation time: %s\n", time.Since(start))
 	if result != expectedResult {
-		t.Errorf("expected %d, got %d", expectedResult, result)
+		t.Errorf("expected %d, got %d\n", expectedResult, result)
 	}
 }

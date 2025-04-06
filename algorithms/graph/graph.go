@@ -5,18 +5,29 @@ import (
 	"github.com/RVetas/Go-Algorithms/structures/node"
 )
 
-// Walk recursively walks the graph calling fn for each node, including starting position.
-func Walk[T any](head *node.Node[T], fn func(node *node.Node[T])) {
+// WalkDFS recursively walks the graph depth-first calling fn for each node, including starting position.
+func WalkDFS[T any](head *node.Node[T], fn func(node *node.Node[T])) {
 	if head == nil {
 		return
 	}
 
 	// To prevent cycling we keep visitedNodes
 	visitedNodes := make(map[*node.Node[T]]bool)
-	walk(head, visitedNodes, fn)
+	walkDFS(head, visitedNodes, fn)
 }
 
-func walk[T any](node *node.Node[T], visitedNodes map[*node.Node[T]]bool, fn func(node *node.Node[T])) {
+// WalkBFS iteratively walks the graph breadth-first calling fn for each node, including starting position.
+func WalkBFS[T any](head *node.Node[T], fn func(node *node.Node[T])) {
+	if head == nil {
+		return
+	}
+
+	// To prevent cycling we keep visitedNodes
+	visitedNodes := make(map[*node.Node[T]]bool)
+	walkBFS(head, visitedNodes, fn)
+}
+
+func walkDFS[T any](node *node.Node[T], visitedNodes map[*node.Node[T]]bool, fn func(node *node.Node[T])) {
 	if val, ok := visitedNodes[node]; val && ok {
 		return
 	}
@@ -26,6 +37,22 @@ func walk[T any](node *node.Node[T], visitedNodes map[*node.Node[T]]bool, fn fun
 		fn(node)
 	}
 	for _, val := range node.Children {
-		walk(val, visitedNodes, fn)
+		walkDFS(val, visitedNodes, fn)
+	}
+}
+func walkBFS[T any](head *node.Node[T], visitedNodes map[*node.Node[T]]bool, fn func(node *node.Node[T])) {
+	queue := make([]*node.Node[T], 0, 5)
+	queue = append(queue, head)
+
+	for len(queue) > 0 {
+		current := queue[0]
+		queue = queue[1:]
+		if val, ok := visitedNodes[current]; val && ok {
+			continue
+		}
+		if fn != nil {
+			fn(current)
+		}
+		queue = append(queue, current.Children...)
 	}
 }
